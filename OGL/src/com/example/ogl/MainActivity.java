@@ -19,19 +19,32 @@ package com.example.ogl;
 import android.app.Activity;
 import android.app.ActivityManager;
 import android.content.Context;
+import android.content.DialogInterface;
 import android.content.pm.ConfigurationInfo;
+import android.graphics.BitmapFactory;
 import android.opengl.GLSurfaceView;
 import android.os.Bundle;
+import android.view.View;
+import android.view.View.OnClickListener;
+import android.widget.ImageView;
 
 /**
  * This sample shows how to check for OpenGL ES 2.0 support at runtime, and then
  * use either OpenGL ES 1.0 or OpenGL ES 2.0, as appropriate.
  */
-public class MainActivity extends Activity {
+public class MainActivity extends Activity implements OnClickListener {
+	private ImageView mView;
+	
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
-        mGLSurfaceView = new GLSurfaceView(this);
+        setContentView(R.layout.activity_main);
+        mGLSurfaceView = (GLSurfaceView) findViewById(R.id.surfView);//new GLSurfaceView(this);
+        mGLSurfaceView.setOnClickListener(this);
+        mView = (ImageView) findViewById(R.id.imgView);
+        mView.setImageBitmap(BitmapFactory.decodeStream(getResources().openRawResource(R.raw.psb2)));
+        mView.setOnClickListener(this);
+        
         if (detectOpenGLES20()) {
             // Tell the surface view we want to create an OpenGL ES 2.0-compatible
             // context, and set an OpenGL ES 2.0-compatible renderer.
@@ -42,7 +55,7 @@ public class MainActivity extends Activity {
             // this renderer might approximate the same output as the 2.0 renderer.
             //mGLSurfaceView.setRenderer(new TriangleRenderer(this));
         }
-        setContentView(mGLSurfaceView);
+        //setContentView(mGLSurfaceView);
     }
 
     private boolean detectOpenGLES20() {
@@ -69,4 +82,20 @@ public class MainActivity extends Activity {
     }
 
     private GLSurfaceView mGLSurfaceView;
+
+	@Override
+	public void onClick(View v) {
+		switch (v.getId()) {
+		case R.id.imgView: {
+			mGLSurfaceView.setVisibility(View.VISIBLE);
+			break;
+		}
+		
+		case R.id.surfView: {
+			mGLSurfaceView.setVisibility(View.INVISIBLE);
+			break;
+		}
+		}
+	}
+
 }
